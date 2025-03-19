@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
+import { supabase } from '../lib/supabase'; // Importa el cliente de Supabase
+
+
 
 const Home = () => {
-  const images = [
-    'https://images.unsplash.com/photo-1593560708920-61dd98c46a4e?auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1566843972142-a7fcb70de55a?auto=format&fit=crop&q=80',
-    'https://images.unsplash.com/photo-1541745537411-b8046dc6d66c?auto=format&fit=crop&q=80',
+  const images = ['//assets/gallery1.webp',
+  '//assets/gallery2.webp',
+  '//assets/gallery3.webp',
   ];
 
   const settings = {
@@ -19,6 +21,56 @@ const Home = () => {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 3000,
+  };
+
+  // Estado para el formulario
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    subject: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState('');
+
+  // Manejar cambios en los inputs
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  // Manejar el envío del formulario
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setSubmitMessage('');
+
+    try {
+      const { data, error } = await supabase
+        .from('contact_messages')
+        .insert([
+          {
+            name: formData.name,
+            email: formData.email,
+            subject: formData.subject,
+            message: formData.message,
+          },
+        ]);
+
+      if (error) {
+        throw error;
+      }
+
+      setSubmitMessage('¡Mensaje enviado con éxito!');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error) {
+      setSubmitMessage('Error al enviar el mensaje. Intenta de nuevo.');
+      console.error('Error:', error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -82,11 +134,11 @@ const Home = () => {
           <h2 className="text-3xl font-bold text-center mb-6 text-gray-900 dark:text-gray-100">Descubre el Arte de Nuestra Pizza</h2>
           <div className="relative overflow-hidden rounded-lg shadow-md bg-gray-800">
             <iframe
-              src="https://www.youtube.com/embed/9GqLfxhf8W4" // Reemplaza con el ID de tu video
+              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
-              className="w-full h-64 md:h-96" // Ajuste de altura para un banner más ancho
+              className="w-full h-64 md:h-96"
             ></iframe>
             <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80')] bg-cover bg-center opacity-50"></div>
           </div>
@@ -98,7 +150,6 @@ const Home = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">Contacto</h2>
           <div className="max-w-4xl mx-auto">
-            {/* Sección de información y formulario */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mb-12">
               <div>
                 <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Información</h3>
@@ -123,13 +174,20 @@ const Home = () => {
               </div>
               <div>
                 <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-gray-100">Envíanos un mensaje</h3>
-                <form className="space-y-4">
+                {submitMessage && (
+                  <p className={`mb-4 ${submitMessage.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
+                    {submitMessage}
+                  </p>
+                )}
+                <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
                     <label htmlFor="name" className="block text-gray-700 dark:text-gray-300">Nombre</label>
                     <input
                       type="text"
                       id="name"
                       name="name"
+                      value={formData.name}
+                      onChange={handleChange}
                       className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
                       required
                     />
@@ -140,6 +198,8 @@ const Home = () => {
                       type="email"
                       id="email"
                       name="email"
+                      value={formData.email}
+                      onChange={handleChange}
                       className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
                       required
                     />
@@ -150,6 +210,8 @@ const Home = () => {
                       type="text"
                       id="subject"
                       name="subject"
+                      value={formData.subject}
+                      onChange={handleChange}
                       className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
                       required
                     />
@@ -160,20 +222,22 @@ const Home = () => {
                       id="message"
                       name="message"
                       rows={4}
+                      value={formData.message}
+                      onChange={handleChange}
                       className="w-full p-2 border rounded-lg bg-white dark:bg-gray-700 dark:text-gray-300 dark:border-gray-600"
                       required
                     ></textarea>
                   </div>
                   <button
                     type="submit"
-                    className="w-full bg-amber-600 text-white p-2 rounded-lg hover:bg-amber-700 transition dark:bg-amber-500 dark:hover:bg-amber-600"
+                    disabled={isSubmitting}
+                    className={`w-full bg-amber-600 text-white p-2 rounded-lg hover:bg-amber-700 transition dark:bg-amber-500 dark:hover:bg-amber-600 ${isSubmitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
-                    Enviar
+                    {isSubmitting ? 'Enviando...' : 'Enviar'}
                   </button>
                 </form>
               </div>
             </div>
-            {/* Sección del mapa (centrado y ocupando todo el ancho) */}
             <div className="mt-12">
               <h3 className="text-xl font-semibold mb-4 text-center text-gray-900 dark:text-gray-100">Nuestra ubicación</h3>
               <iframe 
