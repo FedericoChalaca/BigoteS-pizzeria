@@ -1,0 +1,17 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Estilos personalizados para react-slick en modo oscuro */
+.dark .slick-dots li button:before {
+  color: #d1d5db; /* gris claro para los puntos inactivos */
+}
+
+.dark .slick-dots li.slick-active button:before {
+  color: #fbbf24; /* ámbar para el punto activo */
+}
+
+.dark .slick-prev:before,
+.dark .slick-next:before {
+  color: #d1d5db; /* gris claro para las flechas */
+}
