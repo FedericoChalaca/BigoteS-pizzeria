@@ -31,3 +31,90 @@ Sigue estos pasos para instalar y ejecutar el proyecto localmente:
 1. **Clona el repositorio**:
    ```bash
    git clone https://github.com/FedericoChalaca/Bigotes-pizzeria.git
+Navega al directorio del proyecto:
+bash
+
+Contraer
+
+Ajuste
+
+Copiar
+cd Bigotes-pizzeria
+Instala las dependencias:
+Si usas npm:
+bash
+
+Contraer
+
+Ajuste
+
+Copiar
+npm install
+O si usas yarn:
+bash
+
+Contraer
+
+Ajuste
+
+Copiar
+yarn install
+Configura las fuentes de Google Fonts (si no están incluidas):
+Asegúrate de que el archivo public/index.html incluya el enlace:
+html
+
+Contraer
+
+Ajuste
+
+Copiar
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+🏃‍♂️ Ejecución del Proyecto
+Inicia el servidor de desarrollo:
+Si usas npm:
+bash
+
+Contraer
+
+Ajuste
+
+Copiar
+npm start
+O si usas yarn:
+bash
+
+Contraer
+
+Ajuste
+
+Copiar
+yarn start
+Abre el proyecto en tu navegador:
+Visita http://localhost:3000 (o el puerto indicado en la terminal).
+🛠️ Estructura del Proyecto
+text
+
+Contraer
+
+Ajuste
+
+Copiar
+Bigotes-pizzeria/
+├── public/              # Archivos públicos (index.html, favicon, etc.)
+├── src/                 # Código fuente
+│   ├── components/      # Componentes reutilizables
+│   │   ├── Layout.tsx   # Componente de diseño general (header, footer)
+│   │   └── Home.tsx     # Página principal
+│   ├── index.css        # Estilos globales (incluye Tailwind CSS y Google Fonts)
+│   └── App.tsx          # Componente raíz de la aplicación
+├── package.json         # Dependencias y scripts
+├── tailwind.config.js   # Configuración de Tailwind CSS
+└── README.md            # Este archivo
+🎨 Tecnologías Utilizadas
+React: Biblioteca para construir interfaces de usuario.
+TypeScript: Para un desarrollo más seguro y tipado.
+Tailwind CSS: Framework de estilos para un diseño moderno y responsivo.
+React Router: Para la navegación entre páginas.
+React Slick: Para el carrusel de imágenes en la galería.
+Google Fonts: Fuentes personalizadas (Roboto y Lobster).
+Lucide React: Iconos utilizados en el header y footer.
