@@ -8,9 +8,10 @@ import { supabase } from '../lib/supabase'; // Importa el cliente de Supabase
 
 
 const Home = () => {
-  const images = ['//assets/gallery1.webp',
-  '//assets/gallery2.webp',
-  '//assets/gallery3.webp',
+  const images = [
+    'https://i.postimg.cc/XNhnPw3B/gallery1.webp',
+    'https://i.postimg.cc/HnJdxL0L/gallery2.webp',
+    'https://i.postimg.cc/NMjQ3D5m/gallery3.webp',
   ];
 
   const settings = {
@@ -76,7 +77,7 @@ const Home = () => {
   return (
     <div>
       {/* Hero Section */}
-      <section className="relative h-[600px] bg-cover bg-center" style={{ backgroundImage: 'url("https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&q=80")' }}>
+      <section className="relative h-[600px] bg-cover bg-center" style={{ backgroundImage: "url('https://i.postimg.cc/Bbds1GNB/hero.webp')" }}>
         <div className="absolute inset-0 bg-black bg-opacity-50 dark:bg-opacity-70" />
         <div className="relative container mx-auto px-4 h-full flex items-center">
           <div className="text-white max-w-2xl">
@@ -95,7 +96,13 @@ const Home = () => {
           <h2 className="text-3xl font-bold text-center mb-12 text-gray-900 dark:text-gray-100">Quiénes Somos</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
-              <img src="https://images.unsplash.com/photo-1542834369-f10ebf06d3e0?auto=format&fit=crop&q=80" alt="Restaurant" className="rounded-lg shadow-lg" />
+            <img
+  src="https://i.postimg.cc/1t7ysFqT/restaurant.webp"
+  alt="Restaurant"
+  className="rounded-lg shadow-lg"
+  loading="lazy"
+/>  
+
             </div>
             <div>
               <p className="text-lg text-gray-700 mb-6 dark:text-gray-300">
@@ -121,7 +128,7 @@ const Home = () => {
           <Slider {...settings}>
             {images.map((image, index) => (
               <div key={index} className="px-2">
-                <img src={image} alt={`Galería ${index + 1}`} className="rounded-lg shadow-md w-full h-64 object-cover" />
+                <img src={image} alt={`Galería ${index + 1}`} className="rounded-lg shadow-md w-full h-64 object-cover" loading="lazy"/>
               </div>
             ))}
           </Slider>
