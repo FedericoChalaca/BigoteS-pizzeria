@@ -1,5 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Layout from './components/Layout'; // Mantenemos el Layout para el header
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';import Layout from './components/Layout'; // Mantenemos el Layout para el header
 import Home from './pages/Home';
 import Menu from './pages/Menu.tsx';
 import Cart from './pages/Cart.tsx';
