@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Facebook, Instagram, ShoppingCart, User } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom'; // Añadimos useLocation
+import { Facebook, Instagram, ShoppingCart, User, Sun, Moon } from 'lucide-react';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -8,52 +8,86 @@ interface LayoutProps {
 
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [darkMode, setDarkMode] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const location = useLocation(); // Obtenemos la ruta actual
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Determinamos si estamos en la página del menú
+  const isMenuPage = location.pathname === '/menu';
 
   return (
     <div className={`min-h-screen ${darkMode ? 'dark bg-gray-900' : 'bg-stone-50'}`}>
-      <header className="bg-amber-900 text-white dark:bg-gray-800 dark:text-gray-200 sticky top-0 z-50 shadow-md">
-        <div className="container mx-auto px-4 py-4">
+      <header
+        className={`bg-amber-900 text-white dark:bg-gray-800 dark:text-gray-200 sticky top-0 z-50 shadow-md transition-all duration-300 ${
+          isScrolled ? 'py-0.2' : 'py-3'
+        }`}
+      >
+        <div className="container mx-auto px-4">
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
-              <img src="/logo.png" alt="Bigotes" className="h-12" />
+              <img src="https://i.postimg.cc/mg57q6pf/Logo.webp" alt="Bigotes" className="h-14" />
+              BigoteS
             </Link>
-            
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="hover:text-amber-200 transition dark:hover:text-amber-300">Inicio</Link>
-              <Link to="/menu" className="hover:text-amber-200 transition dark:hover:text-amber-300">Menú</Link>
-              <a href="#about" className="hover:text-amber-200 transition dark:hover:text-amber-300">Nosotros</a>
-              <a href="#contact" className="hover:text-amber-200 transition dark:hover:text-amber-300">Contacto</a>
-            </nav>
 
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setDarkMode(!darkMode)}
-                className="px-4 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition dark:bg-gray-700 dark:text-white"
-              >
-                {darkMode ? 'Modo Claro' : 'Modo Oscuro'}
-              </button>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-amber-200 transition dark:hover:text-amber-300">
-                <Facebook size={24} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="hover:text-amber-200 transition dark:hover:text-amber-300">
-                <Instagram size={24} />
-              </a>
-              <Link to="/cart" className="hover:text-amber-200 transition dark:hover:text-amber-300">
-                <ShoppingCart size={24} />
-              </Link>
-              <Link to="/login" className="hover:text-amber-200 transition dark:hover:text-amber-300">
-                <User size={24} />
-              </Link>
-            </div>
+            {isScrolled ? (
+              <div className="flex items-center space-x-4">
+                <Link to="/login" className="hover:text-amber-200 transition dark:hover:text-amber-300">
+                  <User size={24} />
+                </Link>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center space-x-4">
+                  <button
+                    onClick={() => setDarkMode(!darkMode)}
+                    className="p-2 bg-amber-900 text-white rounded-full hover:bg-amber-800 transition dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
+                  >
+                    {darkMode ? <Sun size={24} /> : <Moon size={24} />}
+                  </button>
+                  <a
+                    href="https://facebook.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-amber-200 transition dark:hover:text-amber-300"
+                  >
+                    <Facebook size={24} />
+                  </a>
+                  <a
+                    href="https://instagram.com"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-amber-200 transition dark:hover:text-amber-300"
+                  >
+                    <Instagram size={24} />
+                  </a>
+                  <Link to="/cart" className="hover:text-amber-200 transition dark:hover:text-amber-300">
+                    <ShoppingCart size={24} />
+                  </Link>
+                  <Link to="/login" className="hover:text-amber-200 transition dark:hover:text-amber-300">
+                    <User size={24} />
+                  </Link>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </header>
 
-      <main>
-        {children}
-      </main>
+      <main>{children}</main>
 
-      <footer className="bg-amber-900 text-white mt-20 dark:bg-gray-800 dark:text-gray-200">
+      <footer className="flex-1 bg-amber-900 text-white dark:bg-gray-800 dark:text-gray-200">
         <div className="container mx-auto px-4 py-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div>
@@ -70,9 +104,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
               <h3 className="text-xl font-bold mb-4">Ubicación</h3>
               <p>Calle Principal #123</p>
               <p>Ciudad, País</p>
-              <a 
-                href="https://maps.google.com" 
-                target="_blank" 
+              <a
+                href="https://maps.google.com"
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-amber-200 hover:text-amber-100 transition dark:text-amber-300 dark:hover:text-amber-400"
               >
@@ -83,13 +117,15 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </div>
       </footer>
 
-      {/* Botón fijo flotante ajustado */}
-      <Link
-        to="/Menu" // Corregí a "/menu" para consistencia con las rutas
-        className="fixed bottom-8 right-8 bg-amber-600 text-white rounded-full shadow-lg hover:bg-amber-700 transition transform hover:scale-105 dark:bg-amber-500 dark:hover:bg-amber-600 w-14 h-14 flex items-center justify-center"
-      >
-        <ShoppingCart size={24} />
-      </Link>
+      {/* Mostramos el botón solo si NO estamos en la página del menú */}
+      {!isMenuPage && (
+        <Link
+          to="/menu"
+          className="fixed bottom-8 right-8 bg-amber-600 text-white rounded-full shadow-lg hover:bg-amber-700 transition transform hover:scale-105 dark:bg-amber-500 dark:hover:bg-amber-600 w-14 h-14 flex items-center justify-center"
+        >
+          <ShoppingCart size={24} />
+        </Link>
+      )}
     </div>
   );
 };

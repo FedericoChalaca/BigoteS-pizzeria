@@ -1,10 +1,12 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 interface CartItem {
-  id: string; // UUID como string
+  id: string;
   name: string;
   price: number;
   quantity: number;
+  size: string; // Added size property
+  removedIngredients?: string[];
 }
 
 interface CartContextType {
